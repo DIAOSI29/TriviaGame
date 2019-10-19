@@ -2,7 +2,7 @@ let levels = [
   {
     question: "How many legs do butterflies have?",
     possibleAnswers: [0, 2, 4, 6],
-    answerIndex: 3,
+    answer: 3,
     congratImageUrl:
       "https://media.giphy.com/media/oX9prChocapB0V9U4X/giphy.gif"
   },
@@ -39,3 +39,21 @@ let levels = [
     congratImageUrl: "https://media.giphy.com/media/NdpQJAQuBFQJ2/giphy.gif"
   }
 ];
+
+var currentLevelIndex = 0;
+var currentLevel = levels[currentLevelIndex];
+
+function checkAnswer(userSelection) {}
+
+function showGame(game) {
+  $("#question").text(game.question);
+  for (let answer of game.possibleAnswers) {
+    var possibleAnswersButton = $("<button>");
+    $(possibleAnswersButton).text(answer);
+    $(possibleAnswersButton).click(function() {
+      checkAnswer();
+    });
+  }
+  $("#answers").text(game.possibleAnswers);
+  $("#answers").text(game.possibleAnswers);
+}

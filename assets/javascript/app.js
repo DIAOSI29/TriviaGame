@@ -44,6 +44,14 @@ let levels = [
   }
 ];
 
+$("#startButtonText").click(function() {
+  $(this).css("visibility", "hidden");
+  $("#gameLevel").css("visibility", "visible");
+  GenerateQuestionTimer(currentLevel);
+});
+
+var questionTimerNumber;
+var answerTimerNumber;
 var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
 var currentLevelIndex = 0;
 var currentLevel = levels[currentLevelIndex];
@@ -60,14 +68,18 @@ function checkAnswer(userSelection) {
 }
 
 function showRight() {
+  clearInterval(questionTimer);
   $("#rightOrWrong").text("WELL DONE MATE!");
   $("#answers").html("The right answer is: " + currentlevelAnswer);
   $("#congratPanel").attr("src", currentLevelCongratImageUrl);
+  currentLevelIndex++;
 }
 function showWrong() {
+  clearInterval(questionTimer);
   $("#rightOrWrong").text("WRONG GUESS MATE!");
   $("#answers").html("The right answer is: " + currentlevelAnswer);
-  $("#congratPanel").attr("src", currentLevelCongratImageUrl);
+  $("#congratPanel").attr("src", loseImageUrl);
+  currentLevelIndex++;
 }
 
 function showGame(game) {
@@ -82,7 +94,52 @@ function showGame(game) {
     cell.append(possibleAnswersButton);
     return cell;
   }
+}
 
-  $("#answers").text(game.possibleAnswers);
-  $("#answers").text(game.possibleAnswers);
+function GenerateQuestionTimer(game) {
+  var questionTimer;
+  questionTimerNumber = 30;
+
+  clearInterval(questionTimer);
+  questionTimer = setInterval(decrement, 1000);
+
+  function decrement() {
+    showGame(game);
+    questionTimerNumber--;
+    $("#timeRow").html("<h2>" + questionTimerNumber + "</h2>");
+    if (questionTimerNumber === 0) {
+      stop();
+      showWrong();
+    }
+  }
+
+  function stop() {
+    clearInterval(questionPageTimer);
+  }
+
+  //   run();
+}
+
+function GenerateAnswerTimer(game) {
+  var answerTimer;
+  answerTimerNumber = 5;
+
+  clearInterval(answerTimer);
+  answerTimer = setInterval(decrement, 1000);
+
+  function decrement() {
+    showGame(game);
+    answerTimerNumber--;
+    $("#timeRow").html("<h2>" + answerTimerNumber + "</h2>");
+    if (answerTimerNumber === 0) {
+      stop();
+      showWrong();
+    }
+  }
+
+  function stop() {
+    clearInterval(questionPageTimer);
+  }
+
+  // run();
 }

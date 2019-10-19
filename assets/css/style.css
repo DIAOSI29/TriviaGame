@@ -53,7 +53,7 @@ body {
 
 #startButton {
   background: rgba(241, 30, 2, 0.5);
-  width: 400px;
+  width: 500px;
   height: 250px;
   border-radius: 50px;
   border: none;
@@ -64,8 +64,9 @@ body {
 }
 
 #startButtonText {
-  font-size: 50px;
+  font-size: 30px;
   font-family: "Special Elite", cursive;
+  line-height: 60px;
 }
 
 .gameLevel {

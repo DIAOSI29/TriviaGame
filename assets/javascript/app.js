@@ -65,7 +65,8 @@ function showGame(game) {
     var possibleAnswersButton = $("<button>");
     possibleAnswersButton.text(answer);
     possibleAnswersButton.click(function() {
-      checkAnswer(answer);
+      checkAnswer(this.text);
+      console.log("checkpoint");
     });
     var cell = $("<li>");
     cell.append(possibleAnswersButton);
@@ -82,7 +83,7 @@ function checkAnswer(userSelection) {
 }
 
 function showRight() {
-  clearInterval(questionTimer);
+  //   clearInterval(questionTimer);
   $("#rightOrWrong").text("WELL DONE MATE!");
   $("#answers").html("The right answer is: " + currentlevelAnswer);
   $("#congratPanel").attr("src", currentLevelCongratImageUrl);
@@ -90,7 +91,7 @@ function showRight() {
 }
 
 function showWrong() {
-  clearInterval(questionTimer);
+  //   clearInterval(questionTimer);
   $("#rightOrWrong").text("WRONG GUESS MATE!");
   $("#answers").html("The right answer is: " + currentlevelAnswer);
   $("#congratPanel").attr("src", loseImageUrl);
@@ -106,7 +107,7 @@ function generateQuestionTimer(game) {
 
   function decrementQuestion() {
     questionTimerNumber--;
-    $("#timeRow").html("<h2>" + questionTimerNumber + "</h2>");
+    $("#timerRow").html("<h2>" + questionTimerNumber + "</h2>");
     if (questionTimerNumber === 0) {
       stop();
 
@@ -115,7 +116,7 @@ function generateQuestionTimer(game) {
   }
 
   function stop() {
-    clearInterval(questionPageTimer);
+    clearInterval(questionTimer);
   }
 
   //   run();

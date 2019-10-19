@@ -32,8 +32,7 @@ let levels = [
     possibleAnswers: ["Tron", "Toy Story", "Lion king", "101 Dalmatians"],
     answer: "Toy Story",
     answerIndex: 1,
-    congratImageUrl:
-      "https://media.giphy.com/media/wcFlXfhyyyp0c/giphy.gifww.baidu.com"
+    congratImageUrl: "https://media.giphy.com/media/wcFlXfhyyyp0c/giphy.gif"
   },
   {
     question:
@@ -45,32 +44,45 @@ let levels = [
   }
 ];
 
+var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
 var currentLevelIndex = 0;
 var currentLevel = levels[currentLevelIndex];
 var currentlevelAnswer = currentLevel.answer;
+var currentlevelAnswerIndex = currentLevel.answerIndex;
 var currentLevelCongratImageUrl = currentLevel.congratImageUrl;
 
 function checkAnswer(userSelection) {
   if (userSelection == currentlevelAnswer) {
-    showRight(currentLevel);
+    showRight();
   } else {
-    showWrong(currentLevel);
+    showWrong();
   }
 }
 
-function showRight(thisLevel) {
-  $("#showUserCheckResult").text("WELL DONE MATE!");
+function showRight() {
+  $("#rightOrWrong").text("WELL DONE MATE!");
+  $("#answers").html("The right answer is: " + currentlevelAnswer);
+  $("#congratPanel").attr("src", currentLevelCongratImageUrl);
+}
+function showWrong() {
+  $("#rightOrWrong").text("WRONG GUESS MATE!");
+  $("#answers").html("The right answer is: " + currentlevelAnswer);
+  $("#congratPanel").attr("src", currentLevelCongratImageUrl);
 }
 
 function showGame(game) {
   $("#question").text(game.question);
   for (let answer of game.possibleAnswers) {
     var possibleAnswersButton = $("<button>");
-    $(possibleAnswersButton).text(answer);
-    $(possibleAnswersButton).click(function() {
+    possibleAnswersButton.text(answer);
+    possibleAnswersButton.click(function() {
       checkAnswer(answer);
     });
+    var cell = $("<li>");
+    cell.append(possibleAnswersButton);
+    return cell;
   }
+
   $("#answers").text(game.possibleAnswers);
   $("#answers").text(game.possibleAnswers);
 }

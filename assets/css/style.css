@@ -1,0 +1,76 @@
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+. {
+  box-sizing: border-box;
+}
+@media (min-aspect-ratio: 16/9) {
+  #videoBG {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-aspect-ratio: 16/9) {
+  #videoBG {
+    width: auto;
+    height: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  #videoBG {
+    display: none;
+  }
+  body {
+    background: url("poster.jpg");
+    background-size: cover;
+  }
+}
+
+#videoBG {
+  position: fixed;
+  z-index: -1;
+}
+
+.game {
+  display: grid;
+  place-items: center;
+  position: relative;
+  padding: 20px;
+}
+
+#gameBody {
+  margin: auto;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  min-width: 400px;
+}
+
+#startButton {
+  background: rgba(241, 30, 2, 0.5);
+  width: 400px;
+  height: 250px;
+  border-radius: 50px;
+  border: none;
+}
+#startButton:hover {
+  box-shadow: 0 8px 40px 0 rgb(34, 25, 25);
+  background: rgba(241, 30, 2, 1);
+}
+
+#startButtonText {
+  font-size: 50px;
+  font-family: "Special Elite", cursive;
+}
+
+.gameLevel {
+  background-color: aliceblue;
+  width: 50%;
+  height: auto;
+  visibility: hidden;
+}

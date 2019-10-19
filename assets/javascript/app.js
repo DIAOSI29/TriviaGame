@@ -45,9 +45,9 @@ let levels = [
 ];
 
 $("#startButtonText").click(function() {
-  $(this).css("visibility", "hidden");
+  $("#startButton").css("visibility", "hidden");
   $("#gameLevel").css("visibility", "visible");
-  GenerateQuestionTimer(currentLevel);
+  generateQuestionTimer(currentLevel);
 });
 
 var questionTimerNumber;
@@ -59,29 +59,6 @@ var currentlevelAnswer = currentLevel.answer;
 var currentlevelAnswerIndex = currentLevel.answerIndex;
 var currentLevelCongratImageUrl = currentLevel.congratImageUrl;
 
-function checkAnswer(userSelection) {
-  if (userSelection == currentlevelAnswer) {
-    showRight();
-  } else {
-    showWrong();
-  }
-}
-
-function showRight() {
-  clearInterval(questionTimer);
-  $("#rightOrWrong").text("WELL DONE MATE!");
-  $("#answers").html("The right answer is: " + currentlevelAnswer);
-  $("#congratPanel").attr("src", currentLevelCongratImageUrl);
-  currentLevelIndex++;
-}
-function showWrong() {
-  clearInterval(questionTimer);
-  $("#rightOrWrong").text("WRONG GUESS MATE!");
-  $("#answers").html("The right answer is: " + currentlevelAnswer);
-  $("#congratPanel").attr("src", loseImageUrl);
-  currentLevelIndex++;
-}
-
 function showGame(game) {
   $("#question").text(game.question);
   for (let answer of game.possibleAnswers) {
@@ -92,24 +69,48 @@ function showGame(game) {
     });
     var cell = $("<li>");
     cell.append(possibleAnswersButton);
-    return cell;
+    $("#answers").append(cell);
   }
 }
 
-function GenerateQuestionTimer(game) {
+function checkAnswer(userSelection) {
+  if (userSelection == currentlevelAnswer) {
+    generateSucessfulAnswerTimer(currentLevel);
+  } else {
+    generateFailedAnswerTimer(currentLevel);
+  }
+}
+
+function showRight() {
+  clearInterval(questionTimer);
+  $("#rightOrWrong").text("WELL DONE MATE!");
+  $("#answers").html("The right answer is: " + currentlevelAnswer);
+  $("#congratPanel").attr("src", currentLevelCongratImageUrl);
+  currentLevelIndex++;
+}
+
+function showWrong() {
+  clearInterval(questionTimer);
+  $("#rightOrWrong").text("WRONG GUESS MATE!");
+  $("#answers").html("The right answer is: " + currentlevelAnswer);
+  $("#congratPanel").attr("src", loseImageUrl);
+  currentLevelIndex++;
+}
+
+function generateQuestionTimer(game) {
   var questionTimer;
   questionTimerNumber = 30;
+  showGame(game);
+  //   clearInterval(questionTimer);
+  questionTimer = setInterval(decrementQuestion, 1000);
 
-  clearInterval(questionTimer);
-  questionTimer = setInterval(decrement, 1000);
-
-  function decrement() {
-    showGame(game);
+  function decrementQuestion() {
     questionTimerNumber--;
     $("#timeRow").html("<h2>" + questionTimerNumber + "</h2>");
     if (questionTimerNumber === 0) {
       stop();
-      showWrong();
+
+      generateAnswerTimer(game);
     }
   }
 
@@ -120,20 +121,44 @@ function GenerateQuestionTimer(game) {
   //   run();
 }
 
-function GenerateAnswerTimer(game) {
-  var answerTimer;
+function generateSucessfulAnswerTimer(game) {
+  var rightAnswerTimer;
   answerTimerNumber = 5;
+  showRight();
+  //   clearInterval(answerTimer);
+  rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
 
-  clearInterval(answerTimer);
-  answerTimer = setInterval(decrement, 1000);
-
-  function decrement() {
-    showGame(game);
+  function decrementRightAnswer() {
     answerTimerNumber--;
     $("#timeRow").html("<h2>" + answerTimerNumber + "</h2>");
     if (answerTimerNumber === 0) {
       stop();
-      showWrong();
+      currentLevelIndex++;
+      generateQuestionTimer(game);
+    }
+  }
+
+  function stop() {
+    clearInterval(questionPageTimer);
+  }
+
+  // run();
+}
+
+function generateFailedAnswerTimer(game) {
+  var wrongAnswerTimer;
+  answerTimerNumber = 5;
+  showWrong();
+  //   clearInterval(answerTimer);
+  wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
+
+  function decrementWrongAnswer() {
+    answerTimerNumber--;
+    $("#timeRow").html("<h2>" + answerTimerNumber + "</h2>");
+    if (answerTimerNumber === 0) {
+      stop();
+      currentLevelIndex++;
+      generateQuestionTimer(game);
     }
   }
 

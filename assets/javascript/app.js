@@ -55,42 +55,54 @@ var currentlevelAnswer = currentLevel.answer;
 var currentlevelAnswerIndex = currentLevel.answerIndex;
 var currentLevelCongratImageUrl = currentLevel.congratImageUrl;
 
+var currentLevelPossibleAnswers = currentLevel.possibleAnswers;
+var currentLevelQuestion = currentLevel.question;
+var correctAnswer = 0;
+var incorrectAnswer = 0;
+var unAnsweredAnswer = 0;
+
 function startButtonClick() {
   $("#startButton").click(function() {
     $("#startButton").css("display", "none");
     $("#gameLevel").css("visibility", "visible");
-    generateQuestionTimer(currentLevel);
+    generateQuestionTimer();
   });
 }
 
-function generateQuestionTimer(game) {
-  timerNumber = 30;
-  showGame(game);
+function generateQuestionTimer() {
+  clearRightOrWrong();
+  timerNumber = 31;
+  showGame();
   clearInterval(questionTimer);
+  //   clearInterval(rightAnswerTimer);
+  //   clearInterval(wrongAnswerTimer);
   questionTimer = setInterval(decrementQuestion, 1000);
 }
 
 function decrementQuestion() {
   timerNumber--;
-  $("#timerRow").html("<h2>" + timerNumber + "</h2>");
+  $("#timerRow").html("<h2>" + timerNumber + " seconds remaining " + "</h2>");
   if (timerNumber <= 0) {
-    //   clearInterval(questionTimer);
+    clearInterval(questionTimer);
 
-    generateFailedAnswerTimer(currentLevel);
+    generateFailedAnswerTimer();
   }
 }
 
-function showGame(game) {
-  $("#question").text(game.question);
-  for (let answer of game.possibleAnswers) {
+function showGame() {
+  $("#question").text(currentLevelQuestion);
+  for (let answer of currentLevelPossibleAnswers) {
     var possibleAnswersButton = $("<button>");
     possibleAnswersButton.text(answer);
     possibleAnswersButton.click(function() {
       clearInterval(questionTimer);
-      checkAnswer(this.text);
-      //   console.log("checkpoint");
+      $("#timerRow").html("");
+      var buttonText = $(this).text;
+      checkAnswer(buttonText);
+      console.log(buttonText);
     });
     var cell = $("<li>");
+    cell.css("list-style-type", "none");
     cell.append(possibleAnswersButton);
     $("#answers").append(cell);
   }
@@ -111,36 +123,39 @@ function checkAnswer(userSelection) {
 function generateSuccessfulAnswerTimer() {
   timerNumber = 5;
   showRight();
+  currentLevelIndex++;
   clearInterval(rightAnswerTimer);
   rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
 }
 function decrementRightAnswer() {
   timerNumber--;
-  $("#timerRow").html("<h2>" + timerNumber + "seconds remaining " + "</h2>");
+  $("#timerRow").html("");
   if (timerNumber <= 0) {
     clearInterval(rightAnswerTimer);
 
-    currentLevelIndex++;
-    generateQuestionTimer(currentLevel);
+    generateQuestionTimer();
   }
 }
 
 // run();
 
-function generateFailedAnswerTimer(game) {
+function generateFailedAnswerTimer() {
   timerNumber = 5;
+
   showWrong();
-  //   clearInterval(answerTimer);
+  currentLevelIndex++;
+  clearInterval(wrongAnswerTimer);
   wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
+  console.log(currentLevelIndex);
 }
 
 function decrementWrongAnswer() {
   timerNumber--;
-  $("#timerRow").html("<h2>" + timerNumber + "seconds remaining " + "</h2>");
-  if (timerNumber <= 0) {
+  $("#timerRow").html("");
+  if (timerNumber == 0) {
     clearInterval(wrongAnswerTimer);
-    currentLevelIndex++;
-    generateQuestionTimer(currentLevel);
+    // currentLevelIndex++;
+    generateQuestionTimer();
   }
 }
 
@@ -149,7 +164,7 @@ function showRight() {
   $("#rightOrWrong").text("WELL DONE MATE!");
   $("#answers").html("The right answer is: " + currentlevelAnswer);
   $("#congratPanel").attr("src", currentLevelCongratImageUrl);
-  currentLevelIndex++;
+  //   currentLevelIndex++;
 }
 
 function showWrong() {
@@ -157,7 +172,13 @@ function showWrong() {
   $("#rightOrWrong").text("WRONG GUESS MATE!");
   $("#answers").html("The right answer is: " + currentlevelAnswer);
   $("#congratPanel").attr("src", loseImageUrl);
-  currentLevelIndex++;
+  //   currentLevelIndex++;
+}
+
+function clearRightOrWrong() {
+  $("#rightOrWrong").text("");
+  $("#answers").html("");
+  $("#congratPanel").attr("src", "");
 }
 
 startButtonClick();

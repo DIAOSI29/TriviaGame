@@ -44,14 +44,10 @@ let levels = [
   }
 ];
 
-$("#startButtonText").click(function() {
-  $("#startButton").css("visibility", "hidden");
-  $("#gameLevel").css("visibility", "visible");
-  generateQuestionTimer(currentLevel);
-});
-
-var questionTimerNumber;
-var answerTimerNumber;
+var timerNumber;
+var questionTimer;
+var rightAnswerTimer;
+var wrongAnswerTimer;
 var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
 var currentLevelIndex = 0;
 var currentLevel = levels[currentLevelIndex];
@@ -59,14 +55,40 @@ var currentlevelAnswer = currentLevel.answer;
 var currentlevelAnswerIndex = currentLevel.answerIndex;
 var currentLevelCongratImageUrl = currentLevel.congratImageUrl;
 
+function startButtonClick() {
+  $("#startButton").click(function() {
+    $("#startButton").css("display", "none");
+    $("#gameLevel").css("visibility", "visible");
+    generateQuestionTimer(currentLevel);
+  });
+}
+
+function generateQuestionTimer(game) {
+  timerNumber = 30;
+  showGame(game);
+  clearInterval(questionTimer);
+  questionTimer = setInterval(decrementQuestion, 1000);
+}
+
+function decrementQuestion() {
+  timerNumber--;
+  $("#timerRow").html("<h2>" + timerNumber + "</h2>");
+  if (timerNumber <= 0) {
+    //   clearInterval(questionTimer);
+
+    generateFailedAnswerTimer(currentLevel);
+  }
+}
+
 function showGame(game) {
   $("#question").text(game.question);
   for (let answer of game.possibleAnswers) {
     var possibleAnswersButton = $("<button>");
     possibleAnswersButton.text(answer);
     possibleAnswersButton.click(function() {
+      clearInterval(questionTimer);
       checkAnswer(this.text);
-      console.log("checkpoint");
+      //   console.log("checkpoint");
     });
     var cell = $("<li>");
     cell.append(possibleAnswersButton);
@@ -74,11 +96,51 @@ function showGame(game) {
   }
 }
 
+// function removeInterval(intervalId) {
+//   clearInterval(intervalId);
+// }
+
 function checkAnswer(userSelection) {
   if (userSelection == currentlevelAnswer) {
-    generateSucessfulAnswerTimer(currentLevel);
+    generateSuccessfulAnswerTimer();
   } else {
-    generateFailedAnswerTimer(currentLevel);
+    generateFailedAnswerTimer();
+  }
+}
+
+function generateSuccessfulAnswerTimer() {
+  timerNumber = 5;
+  showRight();
+  clearInterval(rightAnswerTimer);
+  rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
+}
+function decrementRightAnswer() {
+  timerNumber--;
+  $("#timerRow").html("<h2>" + timerNumber + "seconds remaining " + "</h2>");
+  if (timerNumber <= 0) {
+    clearInterval(rightAnswerTimer);
+
+    currentLevelIndex++;
+    generateQuestionTimer(currentLevel);
+  }
+}
+
+// run();
+
+function generateFailedAnswerTimer(game) {
+  timerNumber = 5;
+  showWrong();
+  //   clearInterval(answerTimer);
+  wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
+}
+
+function decrementWrongAnswer() {
+  timerNumber--;
+  $("#timerRow").html("<h2>" + timerNumber + "seconds remaining " + "</h2>");
+  if (timerNumber <= 0) {
+    clearInterval(wrongAnswerTimer);
+    currentLevelIndex++;
+    generateQuestionTimer(currentLevel);
   }
 }
 
@@ -98,74 +160,4 @@ function showWrong() {
   currentLevelIndex++;
 }
 
-function generateQuestionTimer(game) {
-  var questionTimer;
-  questionTimerNumber = 30;
-  showGame(game);
-  //   clearInterval(questionTimer);
-  questionTimer = setInterval(decrementQuestion, 1000);
-
-  function decrementQuestion() {
-    questionTimerNumber--;
-    $("#timerRow").html("<h2>" + questionTimerNumber + "</h2>");
-    if (questionTimerNumber === 0) {
-      stop();
-
-      generateAnswerTimer(game);
-    }
-  }
-
-  function stop() {
-    clearInterval(questionTimer);
-  }
-
-  //   run();
-}
-
-function generateSucessfulAnswerTimer(game) {
-  var rightAnswerTimer;
-  answerTimerNumber = 5;
-  showRight();
-  //   clearInterval(answerTimer);
-  rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
-
-  function decrementRightAnswer() {
-    answerTimerNumber--;
-    $("#timeRow").html("<h2>" + answerTimerNumber + "</h2>");
-    if (answerTimerNumber === 0) {
-      stop();
-      currentLevelIndex++;
-      generateQuestionTimer(game);
-    }
-  }
-
-  function stop() {
-    clearInterval(questionPageTimer);
-  }
-
-  // run();
-}
-
-function generateFailedAnswerTimer(game) {
-  var wrongAnswerTimer;
-  answerTimerNumber = 5;
-  showWrong();
-  //   clearInterval(answerTimer);
-  wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
-
-  function decrementWrongAnswer() {
-    answerTimerNumber--;
-    $("#timeRow").html("<h2>" + answerTimerNumber + "</h2>");
-    if (answerTimerNumber === 0) {
-      stop();
-      currentLevelIndex++;
-      generateQuestionTimer(game);
-    }
-  }
-
-  function stop() {
-    clearInterval(questionPageTimer);
-  }
-
-  // run();
-}
+startButtonClick();

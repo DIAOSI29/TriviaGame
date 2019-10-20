@@ -48,7 +48,7 @@ var timerNumber;
 var questionTimer;
 var rightAnswerTimer;
 var wrongAnswerTimer;
-var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
+// var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
 var currentLevelIndex = 0;
 var currentLevel = levels[currentLevelIndex];
 var currentlevelAnswer = currentLevel.answer;
@@ -59,12 +59,12 @@ var currentLevelPossibleAnswers = currentLevel.possibleAnswers;
 var currentLevelQuestion = currentLevel.question;
 var correctAnswer = 0;
 var incorrectAnswer = 0;
-var unAnsweredAnswer = 0;
+var unansweredAnswer = 0;
 
 function startButtonClick() {
   $("#startButton").click(function() {
     $("#startButton").css("display", "none");
-    $("#gameLevel").css("visibility", "visible");
+    $(".gameLevel").css("visibility", "visible");
     generateQuestionTimer();
   });
 }
@@ -143,7 +143,7 @@ function generateFailedAnswerTimer() {
   timerNumber = 5;
 
   showWrong();
-  currentLevelIndex++;
+
   clearInterval(wrongAnswerTimer);
   wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
   console.log(currentLevelIndex);
@@ -151,8 +151,14 @@ function generateFailedAnswerTimer() {
 
 function decrementWrongAnswer() {
   timerNumber--;
+
   $("#timerRow").html("");
-  if (timerNumber == 0) {
+  if (timerNumber == 0 && currentLevelIndex == 4) {
+    clearInterval(wrongAnswerTimer);
+    // currentLevelIndex++;
+    ShowGameStat();
+  } else if (timerNumber == 0) {
+    currentLevelIndex++;
     clearInterval(wrongAnswerTimer);
     // currentLevelIndex++;
     generateQuestionTimer();
@@ -180,5 +186,37 @@ function clearRightOrWrong() {
   $("#answers").html("");
   $("#congratPanel").attr("src", "");
 }
+
+function clearGameStat() {
+  currentLevelIndex = 0;
+  correctAnswer = 0;
+  incorrectAnswer = 0;
+  unansweredAnswer = 0;
+}
+
+function ShowGameStat() {
+  $(".gameLevel").css("display", "none");
+  $(".gameStatPanel").css("visibility", "visible");
+  $("#correctAnswer").text(correctAnswer);
+  $("#incorrectAnswer").text(incorrectAnswer);
+  $("#unansweredAnswer").text(unansweredAnswer);
+  $("#restartButton").css("visibility", "visible");
+
+  $("#restartButton").click(function() {
+    $(".gameLevel").css("display", "block");
+    $(".gameStatPanel").css("display", "none");
+    clearGameStat();
+    generateQuestionTimer();
+  });
+}
+
+// function restartGameButton() {
+//   var restartButton = $("<button>");
+//   restartButton.text("Do you want to play the game again?");
+//   $(".gameStatPanel").append(restartButton);
+//   restartButton.click(function() {
+
+//   });
+// }
 
 startButtonClick();

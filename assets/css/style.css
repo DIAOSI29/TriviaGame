@@ -7,7 +7,7 @@ body {
 . {
   box-sizing: border-box;
 }
-@media (min-aspect-ratio: 16/9) {
+/* @media (min-aspect-ratio: 16/9) {
   #videoBG {
     width: 100%;
     height: auto;
@@ -29,7 +29,7 @@ body {
     background: url("poster.jpg");
     background-size: cover;
   }
-}
+} */
 
 #videoBG {
   position: fixed;
@@ -43,15 +43,15 @@ body {
   padding: 20px;
 }
 
-#gameBody {
+/* #gameBody {
   margin: auto;
   display: grid;
   place-items: center;
   position: absolute;
   min-width: 400px;
-}
+} */
 
-#startButton {
+/* #startButton {
   background: rgba(241, 30, 2, 0.5);
   width: 500px;
   height: 250px;
@@ -61,17 +61,33 @@ body {
 #startButton:hover {
   box-shadow: 0 8px 40px 0 rgb(34, 25, 25);
   background: rgba(241, 30, 2, 1);
-}
+} */
 
-#startButtonText {
+/* #startButtonText {
   font-size: 30px;
   font-family: "Special Elite", cursive;
   line-height: 60px;
-}
+} */
 
 .gameLevel {
   background-color: aliceblue;
-  width: 50%;
+  width: 100%;
   height: auto;
   visibility: hidden;
+  box-sizing: border-box;
+}
+
+.gameStatPanel {
+  /* display: grid;
+  place-items: center; */
+  visibility: hidden;
+  /* font-size: 30px; */
+  /* font-family: "Special Elite", cursive; */
+  /* line-height: 60px;
+  color: black; */
+}
+
+#restartButton {
+  visibility: hidden;
+  margin-top: 50px;
 }

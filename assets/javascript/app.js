@@ -15,9 +15,9 @@ let levels = [
     congratImageUrl: "https://media.giphy.com/media/T9fHnACJJq8Ba/giphy.gif"
   },
   {
-    question: "Who directed the 2015 movie &quot;The Revenant&quot;?",
+    question: "Who directed the 2015 movie 'The Revenant' ?",
     possibleAnswers: [
-      "Alejandro G. I&ntilde;&aacute;rritu",
+      "Alejandro G. I",
       "Christopher Nolan",
       "David Fincher",
       "Wes Anderson"
@@ -48,23 +48,45 @@ var timerNumber;
 var questionTimer;
 var rightAnswerTimer;
 var wrongAnswerTimer;
-// var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
-var currentLevelIndex = 0;
-var currentLevel = levels[currentLevelIndex];
-var currentlevelAnswer = currentLevel.answer;
-var currentlevelAnswerIndex = currentLevel.answerIndex;
-var currentLevelCongratImageUrl = currentLevel.congratImageUrl;
-
-var currentLevelPossibleAnswers = currentLevel.possibleAnswers;
-var currentLevelQuestion = currentLevel.question;
+var loseImageUrl = "https://media.giphy.com/media/1jARfPtdz7eE0/giphy.gif";
+var currentLevelIndex = -1;
+var currentLevel;
+var currentlevelAnswer;
+var currentlevelAnswerIndex;
+var currentLevelCongratImageUrl;
+var currentLevelPossibleAnswers;
+var currentLevelQuestion;
 var correctAnswer = 0;
 var incorrectAnswer = 0;
 var unansweredAnswer = 0;
 
+function getNextLevel() {
+  currentLevelIndex++;
+  currentLevel = levels[currentLevelIndex];
+  currentlevelAnswer = currentLevel.answer;
+  currentlevelAnswerIndex = currentLevel.answerIndex;
+  currentLevelCongratImageUrl = currentLevel.congratImageUrl;
+  currentLevelPossibleAnswers = currentLevel.possibleAnswers;
+  currentLevelQuestion = currentLevel.question;
+}
+
 function startButtonClick() {
+  var video = $("#videoBG");
+  video.attr("src", "../TriviaGame/assets/images/playagame.mp4");
+  video.get(0).load();
+  video.get(0).play();
+  // $("#video").css("src", "../TriviaGame/assets/images/playagame.mp4");
+  // $("#videoBG")
+  //   .find("source")
+  //   .attr("src", "../TriviaGame/assets/images/playagame.mp4")
+  //   .load();
   $("#startButton").click(function() {
+    video.attr("src", "../TriviaGame/assets/images/codes.mp4");
+    video.get(0).load();
+    video.get(0).play();
     $("#startButton").css("display", "none");
     $(".gameLevel").css("visibility", "visible");
+
     generateQuestionTimer();
   });
 }
@@ -74,8 +96,7 @@ function generateQuestionTimer() {
   timerNumber = 31;
   showGame();
   clearInterval(questionTimer);
-  //   clearInterval(rightAnswerTimer);
-  //   clearInterval(wrongAnswerTimer);
+
   questionTimer = setInterval(decrementQuestion, 1000);
 }
 
@@ -84,22 +105,23 @@ function decrementQuestion() {
   $("#timerRow").html("<h2>" + timerNumber + " seconds remaining " + "</h2>");
   if (timerNumber <= 0) {
     clearInterval(questionTimer);
-
     generateFailedAnswerTimer();
   }
 }
 
 function showGame() {
+  getNextLevel();
+  console.log(currentLevelIndex);
   $("#question").text(currentLevelQuestion);
   for (let answer of currentLevelPossibleAnswers) {
     var possibleAnswersButton = $("<button>");
     possibleAnswersButton.text(answer);
+    possibleAnswersButton.addClass("button");
     possibleAnswersButton.click(function() {
       clearInterval(questionTimer);
       $("#timerRow").html("");
-      var buttonText = $(this).text;
+      var buttonText = $(this).text();
       checkAnswer(buttonText);
-      console.log(buttonText);
     });
     var cell = $("<li>");
     cell.css("list-style-type", "none");
@@ -113,6 +135,7 @@ function showGame() {
 // }
 
 function checkAnswer(userSelection) {
+  console.log(userSelection, currentlevelAnswer);
   if (userSelection == currentlevelAnswer) {
     generateSuccessfulAnswerTimer();
   } else {
@@ -123,14 +146,17 @@ function checkAnswer(userSelection) {
 function generateSuccessfulAnswerTimer() {
   timerNumber = 5;
   showRight();
-  currentLevelIndex++;
   clearInterval(rightAnswerTimer);
   rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
 }
+
 function decrementRightAnswer() {
   timerNumber--;
   $("#timerRow").html("");
-  if (timerNumber <= 0) {
+  if (timerNumber === 0 && currentLevelIndex === levels.length - 1) {
+    clearInterval(rightAnswerTimer);
+    ShowGameStat();
+  } else if (timerNumber <= 0) {
     clearInterval(rightAnswerTimer);
 
     generateQuestionTimer();
@@ -146,21 +172,19 @@ function generateFailedAnswerTimer() {
 
   clearInterval(wrongAnswerTimer);
   wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
-  console.log(currentLevelIndex);
+  // console.log(currentLevelIndex);
 }
 
 function decrementWrongAnswer() {
   timerNumber--;
 
   $("#timerRow").html("");
-  if (timerNumber == 0 && currentLevelIndex == 4) {
+  if (timerNumber === 0 && currentLevelIndex === levels.lengths - 1) {
     clearInterval(wrongAnswerTimer);
-    // currentLevelIndex++;
     ShowGameStat();
-  } else if (timerNumber == 0) {
-    currentLevelIndex++;
+  } else if (timerNumber === 0) {
+    // getNextLevel();
     clearInterval(wrongAnswerTimer);
-    // currentLevelIndex++;
     generateQuestionTimer();
   }
 }
@@ -188,7 +212,7 @@ function clearRightOrWrong() {
 }
 
 function clearGameStat() {
-  currentLevelIndex = 0;
+  currentLevelIndex = -1;
   correctAnswer = 0;
   incorrectAnswer = 0;
   unansweredAnswer = 0;
@@ -206,6 +230,7 @@ function ShowGameStat() {
     $(".gameLevel").css("display", "block");
     $(".gameStatPanel").css("display", "none");
     clearGameStat();
+
     generateQuestionTimer();
   });
 }

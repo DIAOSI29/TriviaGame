@@ -29,18 +29,15 @@
     <title>Trivia Game</title>
   </head>
   <body>
-    <!-- <video
+    <video
       id="videoBG"
       poster="../TriviaGame/assets/images/gamer.jpg"
       autoplay
       muted
       loop
     >
-      <source
-        src="../TriviaGame/assets/images/playagame.mp4"
-        type="video/mp4"
-      />
-    </video> -->
+      <source id="video" src="" type="video/mp4" />
+    </video>
 
     <div class="container-fluid text-center d-flex flex-row">
       <div class="heading text-center mx-auto flex-row p-2 m-3">
@@ -57,15 +54,15 @@
     <div class="game mx-auto col-12">
       <div id="gameBody mx-auto mt-9">
         <button id="startButton">
-          click to start
-          <!-- <p id="startButtonText">DO YOU WANT TO PLAY A GAME?<br>
-                                  If (yes) {Click Me}
-          </p> -->
+          <p id="startButtonText">
+            DO YOU WANT TO PLAY A GAME?<br />
+            If (yes) {Click Me}
+          </p>
         </button>
+        <div id="timerRow"></div>
         <div class="gameLevel mx-auto col-12">
-          <p id="timerRow"></p>
-          <p id="rightOrWrong"></p>
-          <p id="question"></p>
+          <p id="rightOrWrong" class="blackText"></p>
+          <p id="question" class="shinyColor"></p>
           <ul id="answers"></ul>
           <img id="congratPanel" src="" alt="" />
         </div>

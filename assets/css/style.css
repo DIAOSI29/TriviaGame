@@ -4,10 +4,12 @@ body {
   height: 100vh;
   margin: 0;
 }
+
 . {
   box-sizing: border-box;
 }
-/* @media (min-aspect-ratio: 16/9) {
+
+@media (min-aspect-ratio: 16/9) {
   #videoBG {
     width: 100%;
     height: auto;
@@ -29,7 +31,7 @@ body {
     background: url("poster.jpg");
     background-size: cover;
   }
-} */
+}
 
 #videoBG {
   position: fixed;
@@ -43,15 +45,14 @@ body {
   padding: 20px;
 }
 
-/* #gameBody {
+#gameBody {
   margin: auto;
   display: grid;
   place-items: center;
   position: absolute;
   min-width: 400px;
-} */
-
-/* #startButton {
+}
+#startButton {
   background: rgba(241, 30, 2, 0.5);
   width: 500px;
   height: 250px;
@@ -61,33 +62,73 @@ body {
 #startButton:hover {
   box-shadow: 0 8px 40px 0 rgb(34, 25, 25);
   background: rgba(241, 30, 2, 1);
-} */
-
-/* #startButtonText {
+}
+#startButtonText {
   font-size: 30px;
   font-family: "Special Elite", cursive;
   line-height: 60px;
-} */
+}
 
 .gameLevel {
-  background-color: aliceblue;
+  display: grid;
+  place-items: center;
+  background-color: rgba(48, 80, 23, 0.5);
+  min-width: 400px;
   width: 100%;
   height: auto;
   visibility: hidden;
   box-sizing: border-box;
+  padding: 30px;
+  font-family: "Orbitron", sans-serif;
+  border: 10px solid;
+
+  border-image: linear-gradient(45deg, #5c5c5c, #c0bebe 74%) 1;
 }
 
 .gameStatPanel {
-  /* display: grid;
-  place-items: center; */
+  display: grid;
+  place-items: center;
   visibility: hidden;
-  /* font-size: 30px; */
-  /* font-family: "Special Elite", cursive; */
-  /* line-height: 60px;
-  color: black; */
+  font-size: 30px;
+  font-family: "Special Elite", cursive;
+  line-height: 60px;
+  color: black;
 }
 
 #restartButton {
   visibility: hidden;
   margin-top: 50px;
+}
+
+.button {
+  min-width: 400px;
+  widows: 100%;
+  min-height: 100px;
+  line-height: 66px;
+  margin: 15px;
+  font-size: 30px;
+}
+
+.shinyColor {
+  font-size: 30px;
+  background-size: cover;
+  background-color: #ffe53b;
+  background-image: linear-gradient(147deg, #ffe53b 0%, #ff2525 74%);
+
+  background-position: center;
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#timerRow {
+  color: rgb(192, 192, 192);
+  font-family: "Orbitron", sans-serif;
+}
+
+.blackText {
+  font-size: 30px;
+  font-weight: 900;
+  color: black;
 }

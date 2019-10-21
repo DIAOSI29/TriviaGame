@@ -3,11 +3,16 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-}
-
-. {
+  display: grid;
+  place-items: center;
   box-sizing: border-box;
 }
+/* 
+. {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+} */
 
 @media (min-aspect-ratio: 16/9) {
   #videoBG {
@@ -49,21 +54,28 @@ body {
   margin: auto;
   display: grid;
   place-items: center;
-  position: absolute;
+  position: relative;
   min-width: 400px;
 }
+
 #startButton {
+  position: relative;
   background: rgba(241, 30, 2, 0.5);
-  width: 500px;
-  height: 250px;
+  min-width: 500px;
+  min-height: 380px;
   border-radius: 50px;
   border: none;
+  padding: 20px;
+  box-sizing: border-box;
 }
+
 #startButton:hover {
   box-shadow: 0 8px 40px 0 rgb(34, 25, 25);
   background: rgba(241, 30, 2, 1);
 }
+
 #startButtonText {
+  margin-top: 20px;
   font-size: 30px;
   font-family: "Special Elite", cursive;
   line-height: 60px;
@@ -81,7 +93,6 @@ body {
   padding: 30px;
   font-family: "Orbitron", sans-serif;
   border: 10px solid;
-
   border-image: linear-gradient(45deg, #5c5c5c, #c0bebe 74%) 1;
 }
 
@@ -89,15 +100,24 @@ body {
   display: grid;
   place-items: center;
   visibility: hidden;
-  font-size: 30px;
-  font-family: "Special Elite", cursive;
-  line-height: 60px;
-  color: black;
+  font-size: 40px;
+  font-family: "Orbitron", sans-serif;
+  line-height: 40px;
+  color: rgb(1, 32, 13);
+  background-color: #8f8f8f75;
+  padding-top: 50px;
 }
 
 #restartButton {
   visibility: hidden;
   margin-top: 50px;
+  padding: 20px;
+  border-radius: 15px;
+  animation: shineGreen 1.1s infinite alternate;
+}
+
+#restartButton:hover {
+  color: red;
 }
 
 .button {
@@ -131,4 +151,18 @@ body {
   font-size: 30px;
   font-weight: 900;
   color: black;
+}
+
+@keyframes shineGreen {
+  0% {
+    background-color: #004623;
+  }
+  100% {
+    background-color: #646464;
+  }
+}
+
+#correctAnswer,
+#incorrectAnswer,
+#unansweredAnswer {
 }

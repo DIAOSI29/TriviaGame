@@ -22,7 +22,7 @@ let levels = [
       "David Fincher",
       "Wes Anderson"
     ],
-    answer: "Alejandro G. I&ntilde;&aacute;rritu",
+    answer: "Alejandro G. I",
     answerIndex: 0,
     congratImageUrl:
       "https://pmcvariety.files.wordpress.com/2019/02/alejandro-g.-inarritu.jpg?w=1000"
@@ -60,188 +60,182 @@ var correctAnswer = 0;
 var incorrectAnswer = 0;
 var unansweredAnswer = 0;
 
-function getNextLevel() {
-  currentLevelIndex++;
-  currentLevel = levels[currentLevelIndex];
-  currentlevelAnswer = currentLevel.answer;
-  currentlevelAnswerIndex = currentLevel.answerIndex;
-  currentLevelCongratImageUrl = currentLevel.congratImageUrl;
-  currentLevelPossibleAnswers = currentLevel.possibleAnswers;
-  currentLevelQuestion = currentLevel.question;
-}
+$(document).ready(function() {
+  function getNextLevel() {
+    currentLevelIndex++;
+    currentLevel = levels[currentLevelIndex];
+    currentlevelAnswer = currentLevel.answer;
+    currentlevelAnswerIndex = currentLevel.answerIndex;
+    currentLevelCongratImageUrl = currentLevel.congratImageUrl;
+    currentLevelPossibleAnswers = currentLevel.possibleAnswers;
+    currentLevelQuestion = currentLevel.question;
+  }
 
-function startButtonClick() {
-  var video = $("#videoBG");
-  video.attr("src", "../TriviaGame/assets/images/playagame.mp4");
-  video.get(0).load();
-  video.get(0).play();
-  // $("#video").css("src", "../TriviaGame/assets/images/playagame.mp4");
-  // $("#videoBG")
-  //   .find("source")
-  //   .attr("src", "../TriviaGame/assets/images/playagame.mp4")
-  //   .load();
-  $("#startButton").click(function() {
-    video.attr("src", "../TriviaGame/assets/images/codes.mp4");
+  function startButtonClick() {
+    var video = $("#videoBG");
+    video.attr("src", "../TriviaGame/assets/images/playagame.mp4");
     video.get(0).load();
     video.get(0).play();
-    $("#startButton").css("display", "none");
-    $(".gameLevel").css("visibility", "visible");
 
-    generateQuestionTimer();
-  });
-}
+    $("#startButton").click(function() {
+      var audioBG = $("#audioBG");
+      audioBG.remove();
+      // audio.currentTime = 0;
+      video.attr("src", "../TriviaGame/assets/images/codes.mp4");
+      video.get(0).load();
+      video.get(0).play();
+      $("#startButton").css("display", "none");
+      $(".gameLevel").css("visibility", "visible");
 
-function generateQuestionTimer() {
-  clearRightOrWrong();
-  timerNumber = 31;
-  showGame();
-  clearInterval(questionTimer);
-
-  questionTimer = setInterval(decrementQuestion, 1000);
-}
-
-function decrementQuestion() {
-  timerNumber--;
-  $("#timerRow").html("<h2>" + timerNumber + " seconds remaining " + "</h2>");
-  if (timerNumber <= 0) {
-    clearInterval(questionTimer);
-    generateFailedAnswerTimer();
-  }
-}
-
-function showGame() {
-  getNextLevel();
-  console.log(currentLevelIndex);
-  $("#question").text(currentLevelQuestion);
-  for (let answer of currentLevelPossibleAnswers) {
-    var possibleAnswersButton = $("<button>");
-    possibleAnswersButton.text(answer);
-    possibleAnswersButton.addClass("button");
-    possibleAnswersButton.click(function() {
-      clearInterval(questionTimer);
-      $("#timerRow").html("");
-      var buttonText = $(this).text();
-      checkAnswer(buttonText);
+      generateQuestionTimer();
     });
-    var cell = $("<li>");
-    cell.css("list-style-type", "none");
-    cell.append(possibleAnswersButton);
-    $("#answers").append(cell);
   }
-}
 
-// function removeInterval(intervalId) {
-//   clearInterval(intervalId);
-// }
+  function generateQuestionTimer() {
+    clearRightOrWrong();
+    timerNumber = 31;
+    showGame();
+    clearInterval(questionTimer);
 
-function checkAnswer(userSelection) {
-  console.log(userSelection, currentlevelAnswer);
-  if (userSelection == currentlevelAnswer) {
-    generateSuccessfulAnswerTimer();
-  } else {
-    generateFailedAnswerTimer();
+    questionTimer = setInterval(decrementQuestion, 1000);
   }
-}
 
-function generateSuccessfulAnswerTimer() {
-  timerNumber = 5;
-  showRight();
-  clearInterval(rightAnswerTimer);
-  rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
-}
+  function decrementQuestion() {
+    timerNumber--;
+    $("#timerRow").html("<h2>" + timerNumber + " seconds remaining " + "</h2>");
+    if (timerNumber <= 0) {
+      unansweredAnswer++;
+      clearInterval(questionTimer);
+      generateFailedAnswerTimer();
+    }
+  }
 
-function decrementRightAnswer() {
-  timerNumber--;
-  $("#timerRow").html("");
-  if (timerNumber === 0 && currentLevelIndex === levels.length - 1) {
+  function showGame() {
+    getNextLevel();
+    console.log(currentLevelIndex);
+    $("#question").text(currentLevelQuestion);
+    for (let answer of currentLevelPossibleAnswers) {
+      var possibleAnswersButton = $("<button>");
+      possibleAnswersButton.text(answer);
+      possibleAnswersButton.addClass("button");
+      possibleAnswersButton.click(function() {
+        clearInterval(questionTimer);
+        $("#timerRow").html("");
+        var buttonText = $(this).text();
+        checkAnswer(buttonText);
+      });
+      var cell = $("<li>");
+      cell.css("list-style-type", "none");
+      cell.append(possibleAnswersButton);
+      $("#answers").append(cell);
+    }
+  }
+
+  function checkAnswer(userSelection) {
+    console.log(userSelection, currentlevelAnswer);
+    if (userSelection == currentlevelAnswer) {
+      generateSuccessfulAnswerTimer();
+      correctAnswer++;
+    } else {
+      generateFailedAnswerTimer();
+      incorrectAnswer++;
+    }
+  }
+
+  function generateSuccessfulAnswerTimer() {
+    timerNumber = 5;
+    showRight();
     clearInterval(rightAnswerTimer);
-    ShowGameStat();
-  } else if (timerNumber <= 0) {
-    clearInterval(rightAnswerTimer);
-
-    generateQuestionTimer();
+    rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
   }
-}
 
-// run();
+  function decrementRightAnswer() {
+    timerNumber--;
+    $("#timerRow").html("");
+    if (timerNumber === 0 && currentLevelIndex === levels.length - 1) {
+      clearInterval(rightAnswerTimer);
+      ShowGameStat();
+    } else if (timerNumber <= 0) {
+      clearInterval(rightAnswerTimer);
 
-function generateFailedAnswerTimer() {
-  timerNumber = 5;
-
-  showWrong();
-
-  clearInterval(wrongAnswerTimer);
-  wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
-  // console.log(currentLevelIndex);
-}
-
-function decrementWrongAnswer() {
-  timerNumber--;
-
-  $("#timerRow").html("");
-  if (timerNumber === 0 && currentLevelIndex === levels.lengths - 1) {
-    clearInterval(wrongAnswerTimer);
-    ShowGameStat();
-  } else if (timerNumber === 0) {
-    // getNextLevel();
-    clearInterval(wrongAnswerTimer);
-    generateQuestionTimer();
+      generateQuestionTimer();
+    }
   }
-}
 
-function showRight() {
-  //   clearInterval(questionTimer);
-  $("#rightOrWrong").text("WELL DONE MATE!");
-  $("#answers").html("The right answer is: " + currentlevelAnswer);
-  $("#congratPanel").attr("src", currentLevelCongratImageUrl);
-  //   currentLevelIndex++;
-}
+  function generateFailedAnswerTimer() {
+    timerNumber = 5;
+    showWrong();
+    clearInterval(wrongAnswerTimer);
+    wrongAnswerTimer = setInterval(decrementWrongAnswer, 1000);
+    // console.log(currentLevelIndex);
+  }
 
-function showWrong() {
-  //   clearInterval(questionTimer);
-  $("#rightOrWrong").text("WRONG GUESS MATE!");
-  $("#answers").html("The right answer is: " + currentlevelAnswer);
-  $("#congratPanel").attr("src", loseImageUrl);
-  //   currentLevelIndex++;
-}
+  function decrementWrongAnswer() {
+    timerNumber--;
+    $("#timerRow").html("");
+    if (timerNumber === 0 && currentLevelIndex === levels.length - 1) {
+      clearInterval(wrongAnswerTimer);
+      ShowGameStat();
+    } else if (timerNumber === 0) {
+      clearInterval(wrongAnswerTimer);
+      generateQuestionTimer();
+    }
+  }
 
-function clearRightOrWrong() {
-  $("#rightOrWrong").text("");
-  $("#answers").html("");
-  $("#congratPanel").attr("src", "");
-}
+  function showRight() {
+    //   clearInterval(questionTimer);
+    // $("#answers").html("The right answer is: " + currentlevelAnswer);
+    displayRightAnswer();
+    $("#rightOrWrong").text("WELL DONE!");
+    $("#congratPanel").attr("src", currentLevelCongratImageUrl);
+    //   currentLevelIndex++;
+  }
 
-function clearGameStat() {
-  currentLevelIndex = -1;
-  correctAnswer = 0;
-  incorrectAnswer = 0;
-  unansweredAnswer = 0;
-}
+  function displayRightAnswer() {
+    var rightAnswer = $("<div>");
+    rightAnswer
+      .addClass("shinyColor")
+      .html("The right answer is: " + currentlevelAnswer);
+    $("#answers").html(rightAnswer);
+  }
 
-function ShowGameStat() {
-  $(".gameLevel").css("display", "none");
-  $(".gameStatPanel").css("visibility", "visible");
-  $("#correctAnswer").text(correctAnswer);
-  $("#incorrectAnswer").text(incorrectAnswer);
-  $("#unansweredAnswer").text(unansweredAnswer);
-  $("#restartButton").css("visibility", "visible");
+  function showWrong() {
+    //   clearInterval(questionTimer);
+    displayRightAnswer();
+    $("#rightOrWrong").text("COME ON!");
+    // $("#answers").html("The right answer is: " + currentlevelAnswer);
+    $("#congratPanel").attr("src", loseImageUrl);
+  }
 
-  $("#restartButton").click(function() {
-    $(".gameLevel").css("display", "block");
-    $(".gameStatPanel").css("display", "none");
-    clearGameStat();
+  function clearRightOrWrong() {
+    $("#rightOrWrong").text("");
+    $("#answers").html("");
+    $("#congratPanel").attr("src", "");
+  }
 
-    generateQuestionTimer();
-  });
-}
+  function clearGameStat() {
+    currentLevelIndex = -1;
+    correctAnswer = 0;
+    incorrectAnswer = 0;
+    unansweredAnswer = 0;
+  }
 
-// function restartGameButton() {
-//   var restartButton = $("<button>");
-//   restartButton.text("Do you want to play the game again?");
-//   $(".gameStatPanel").append(restartButton);
-//   restartButton.click(function() {
+  function ShowGameStat() {
+    $(".gameLevel").css("display", "none");
+    $(".gameStatPanel").css("visibility", "visible");
+    $("#correctAnswer").text(correctAnswer);
+    $("#incorrectAnswer").text(incorrectAnswer);
+    $("#unansweredAnswer").text(unansweredAnswer);
+    $("#restartButton").css("visibility", "visible");
 
-//   });
-// }
+    $("#restartButton").click(function() {
+      $(".gameLevel").css("display", "block");
+      $(".gameStatPanel").css("display", "none");
+      clearGameStat();
 
-startButtonClick();
+      generateQuestionTimer();
+    });
+  }
+
+  startButtonClick();
+});

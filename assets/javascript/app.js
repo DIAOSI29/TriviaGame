@@ -61,6 +61,7 @@ var incorrectAnswer = 0;
 var unansweredAnswer = 0;
 
 $(document).ready(function() {
+  //function for update all game stats for next level
   function getNextLevel() {
     currentLevelIndex++;
     currentLevel = levels[currentLevelIndex];
@@ -71,16 +72,17 @@ $(document).ready(function() {
     currentLevelQuestion = currentLevel.question;
   }
 
+  //function for landing page button
   function startButtonClick() {
     var video = $("#videoBG");
     video.attr("src", "../TriviaGame/assets/images/playagame.mp4");
     video.get(0).load();
     video.get(0).play();
 
+    //click to change video backgound when games starts and remove the audio play from landing page
     $("#startButton").click(function() {
       var audioBG = $("#audioBG");
       audioBG.remove();
-      // audio.currentTime = 0;
       video.attr("src", "../TriviaGame/assets/images/codes.mp4");
       video.get(0).load();
       video.get(0).play();
@@ -91,6 +93,7 @@ $(document).ready(function() {
     });
   }
 
+  //function to set intervals for each level
   function generateQuestionTimer() {
     clearRightOrWrong();
     timerNumber = 31;
@@ -99,6 +102,7 @@ $(document).ready(function() {
     questionTimer = setInterval(decrementQuestion, 1000);
   }
 
+  //function to display timer and set condition to proceed to the answer page
   function decrementQuestion() {
     timerNumber--;
     $("#timerRow").html("<h2>" + timerNumber + " seconds remaining " + "</h2>");
@@ -109,9 +113,9 @@ $(document).ready(function() {
     }
   }
 
+  //function to generate each level's VIEW based on the question ,possible answer, current game index, etc. Button will be generated automatically which will check answer upon click
   function showGame() {
     getNextLevel();
-    console.log(currentLevelIndex);
     $("#question").text(currentLevelQuestion);
     for (let answer of currentLevelPossibleAnswers) {
       var possibleAnswersButton = $("<button>");
@@ -130,6 +134,7 @@ $(document).ready(function() {
     }
   }
 
+  //function for checking answer and then CONTROL which timer should the game be proceeded to
   function checkAnswer(userSelection) {
     console.log(userSelection, currentlevelAnswer);
     if (userSelection == currentlevelAnswer) {
@@ -141,6 +146,7 @@ $(document).ready(function() {
     }
   }
 
+  //if user selected the right answer then show this page which has built in set interval timer
   function generateSuccessfulAnswerTimer() {
     timerNumber = 5;
     showRight();
@@ -148,6 +154,7 @@ $(document).ready(function() {
     rightAnswerTimer = setInterval(decrementRightAnswer, 1000);
   }
 
+  //display timer and CONTROL the game progress based on level
   function decrementRightAnswer() {
     timerNumber--;
     $("#timerRow").html("");
@@ -161,6 +168,7 @@ $(document).ready(function() {
     }
   }
 
+  //if user selected the wrong answer then show this page with built in set interval timer
   function generateFailedAnswerTimer() {
     timerNumber = 5;
     showWrong();
@@ -169,6 +177,7 @@ $(document).ready(function() {
     // console.log(currentLevelIndex);
   }
 
+  //CONTROL game progress based on level
   function decrementWrongAnswer() {
     timerNumber--;
     $("#timerRow").html("");
@@ -181,28 +190,27 @@ $(document).ready(function() {
     }
   }
 
+  //function for the page VIEW on the answer page when right answer selected
   function showRight() {
-    //   clearInterval(questionTimer);
-    // $("#answers").html("The right answer is: " + currentlevelAnswer);
     displayRightAnswer();
     $("#rightOrWrong").text("WELL DONE!");
     $("#congratPanel").attr("src", currentLevelCongratImageUrl);
-    //   currentLevelIndex++;
   }
 
   function displayRightAnswer() {
     var rightAnswer = $("<div>");
     rightAnswer
       .addClass("shinyColor")
+
       .html("The right answer is: " + currentlevelAnswer);
     $("#answers").html(rightAnswer);
   }
 
+  //function for the page VIEW on the answer page when wrong answer selected
   function showWrong() {
-    //   clearInterval(questionTimer);
     displayRightAnswer();
     $("#rightOrWrong").text("COME ON!");
-    // $("#answers").html("The right answer is: " + currentlevelAnswer);
+
     $("#congratPanel").attr("src", loseImageUrl);
   }
 
@@ -212,6 +220,7 @@ $(document).ready(function() {
     $("#congratPanel").attr("src", "");
   }
 
+  //function to reset game stat when all level had been cleared and ready to restart
   function clearGameStat() {
     currentLevelIndex = -1;
     correctAnswer = 0;
@@ -219,6 +228,7 @@ $(document).ready(function() {
     unansweredAnswer = 0;
   }
 
+  //function to show all game stats and display restart game button
   function ShowGameStat() {
     $(".gameLevel").css("display", "none");
     $(".gameStatPanel").css("visibility", "visible");
@@ -236,5 +246,6 @@ $(document).ready(function() {
     });
   }
 
+  //function to get whole game started
   startButtonClick();
 });

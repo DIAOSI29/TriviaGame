@@ -7,12 +7,6 @@ body {
   place-items: center;
   box-sizing: border-box;
 }
-/* 
-. {
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
-} */
 
 @media (min-aspect-ratio: 16/9) {
   #videoBG {
@@ -59,7 +53,10 @@ body {
 }
 
 #startButton {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: rgba(241, 30, 2, 0.5);
   min-width: 500px;
   min-height: 380px;
@@ -170,4 +167,10 @@ body {
   100% {
     background-color: #646464;
   }
+}
+
+.answers {
+  position: relative;
+  display: grid;
+  place-items: center;
 }

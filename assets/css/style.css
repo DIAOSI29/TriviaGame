@@ -123,10 +123,20 @@ body {
 .button {
   min-width: 400px;
   widows: 100%;
-  min-height: 100px;
-  line-height: 66px;
+  transform: translateX();
+  padding: 10px;
   margin: 15px;
   font-size: 30px;
+  transition-duration: 0.3s;
+  border: none;
+  border-radius: 10px;
+}
+
+.button:hover {
+  box-shadow: 0 8px 40px 0.5 rgb(51, 51, 51);
+  width: 101%;
+  background-color: #d9534f;
+  color: white;
 }
 
 .shinyColor {
@@ -160,9 +170,4 @@ body {
   100% {
     background-color: #646464;
   }
-}
-
-#correctAnswer,
-#incorrectAnswer,
-#unansweredAnswer {
 }

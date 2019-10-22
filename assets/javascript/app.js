@@ -96,7 +96,6 @@ $(document).ready(function() {
     timerNumber = 31;
     showGame();
     clearInterval(questionTimer);
-
     questionTimer = setInterval(decrementQuestion, 1000);
   }
 
